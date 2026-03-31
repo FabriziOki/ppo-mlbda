@@ -11,8 +11,8 @@ After installing, restart your terminal so `uv` is on your PATH.
 **Clone and sync:**
 
 ```powershell
-git clone
-cd <project>
+git clone https://github.com/FabriziOki/ppo-mlbda.git
+cd ppo-mlbda
 uv sync
 ```
 
@@ -41,7 +41,3 @@ uv remove requests
 ```
 
 > **Important:** Do not use `pip install` directly — it bypasses `pyproject.toml` and `uv.lock`, causing environment drift. Always use `uv add` / `uv sync`.
-
----
-
-Want me to save this as a file, or should I also add Linux/macOS instructions alongside it?
