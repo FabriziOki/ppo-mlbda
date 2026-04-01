@@ -13,7 +13,7 @@ import minigrid
 import tyro
 from torch.distributions.categorical import Categorical
 from torch.utils.tensorboard import SummaryWriter
-
+from minigrid.wrappers import ImgObsWrapper
 
 @dataclass
 class Args:
@@ -86,11 +86,11 @@ def make_env(env_id, idx, capture_video, run_name):
             env = gym.wrappers.RecordVideo(env, f"videos/{run_name}")
         else:
             env = gym.make(env_id)
+        env = ImgObsWrapper(env)                      # extracts image from dict
+        env = gym.wrappers.FlattenObservation(env)    # flattens image to 1D
         env = gym.wrappers.RecordEpisodeStatistics(env)
         return env
-
     return thunk
-
 
 def layer_init(layer, std=np.sqrt(2), bias_const=0.0):
     torch.nn.init.orthogonal_(layer.weight, std)
