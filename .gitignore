@@ -1,2 +1,6 @@
 
 .python-version
+videos
+wandb
+runs
+.wandb_key
