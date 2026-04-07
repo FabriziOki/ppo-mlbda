@@ -86,7 +86,7 @@ Paste your API key from `wandb.ai/settings` when prompted. You only need to do t
 Run this first to verify your setup is working:
 
 ```bash
-uv run python ppo.py --env-id CartPole-v1 --total-timesteps 500000 --track --wandb-project-name "ppo-mlbda" --wandb-entity "TEAM_NAME"
+uv run python ppo.py --env-id CartPole-v1 --total-timesteps 500000 --track --wandb-project-name "ppo-mlbda" --wandb-entity "ppo-enhance"
 ```
 
 You should see `episodic_return` climbing toward 500 in the W&B dashboard.
@@ -94,7 +94,7 @@ You should see `episodic_return` climbing toward 500 in the W&B dashboard.
 ### Baseline (MiniGrid)
 
 ```bash
-uv run python ppo.py --env-id MiniGrid-FourRooms-v0 --total-timesteps 1000000 --track --wandb-project-name "ppo-mlbda" --wandb-entity "TEAM_NAME"
+uv run python ppo.py --env-id MiniGrid-FourRooms-v0 --total-timesteps 1000000 --track --wandb-project-name "ppo-mlbda" --wandb-entity "ppo-enhance"
 ```
 
 ### Running multiple seeds (for ablation study)
@@ -102,12 +102,12 @@ uv run python ppo.py --env-id MiniGrid-FourRooms-v0 --total-timesteps 1000000 --
 Always run at least 3 seeds per experiment. Name your runs clearly:
 
 ```bash
-uv run python ppo.py --env-id MiniGrid-FourRooms-v0 --seed 1 --track --wandb-project-name "ppo-mlbda" --wandb-entity "TEAM_NAME" --run-name "baseline-seed1"
-uv run python ppo.py --env-id MiniGrid-FourRooms-v0 --seed 2 --track --wandb-project-name "ppo-mlbda" --wandb-entity "TEAM_NAME" --run-name "baseline-seed2"
-uv run python ppo.py --env-id MiniGrid-FourRooms-v0 --seed 3 --track --wandb-project-name "ppo-mlbda" --wandb-entity "TEAM_NAME" --run-name "baseline-seed3"
+uv run python ppo.py --env-id MiniGrid-FourRooms-v0 --seed 1 --track --wandb-project-name "ppo-mlbda" --wandb-entity "ppo-enhance" --run-name "baseline-seed1"
+uv run python ppo.py --env-id MiniGrid-FourRooms-v0 --seed 2 --track --wandb-project-name "ppo-mlbda" --wandb-entity "ppo-enhance" --run-name "baseline-seed2"
+uv run python ppo.py --env-id MiniGrid-FourRooms-v0 --seed 3 --track --wandb-project-name "ppo-mlbda" --wandb-entity "ppo-enhance" --run-name "baseline-seed3"
 ```
 
-> **Important:** Always include `--wandb-entity "TEAM_NAME"` so all runs appear in the shared team dashboard instead of your personal account. Replace `TEAM_NAME` with the actual team name from W&B.
+> **Important:** Always include `--wandb-entity "ppo-enhance"` so all runs appear in the shared team dashboard instead of any personal account. `ppo-enhance` is our W&B team name.
 
 ---
 

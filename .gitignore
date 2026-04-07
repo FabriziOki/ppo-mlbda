@@ -1,6 +1,10 @@
-
 .python-version
 videos
 wandb
 runs
 .wandb_key
+CLAUDE.md
+
+# AgentOps session artifacts
+.agents/
+ppo_rnd_envpool.py
