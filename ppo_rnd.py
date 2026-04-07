@@ -29,13 +29,13 @@ class Args:
     """if toggled, `torch.backends.cudnn.deterministic=False`"""
     cuda: bool = True
     """if toggled, cuda will be enabled by default"""
-    track: bool = False
+    track: bool = True
     """if toggled, this experiment will be tracked with Weights and Biases"""
-    wandb_project_name: str = "cleanRL"
+    wandb_project_name: str = "ppo-mlbda"
     """the wandb's project name"""
-    wandb_entity: str = None
+    wandb_entity: str = "ppo-enhance"
     """the entity (team) of wandb's project"""
-    capture_video: bool = False
+    capture_video: bool = True
     """whether to capture videos of the agent performances (check out `videos` folder)"""
 
     # Algorithm specific arguments
@@ -45,9 +45,9 @@ class Args:
     """total timesteps of the experiments"""
     learning_rate: float = 1e-4
     """the learning rate of the optimizer"""
-    num_envs: int = 8
+    num_envs: int = 16
     """the number of parallel game environments"""
-    num_steps: int = 128
+    num_steps: int = 256
     """the number of steps to run in each environment per policy rollout"""
     anneal_lr: bool = True
     """Toggle learning rate annealing for policy and value networks"""
