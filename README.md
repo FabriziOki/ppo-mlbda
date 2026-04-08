@@ -89,8 +89,6 @@ Run this first to verify your setup is working:
 uv run python ppo.py --env-id MiniGrid-Empty-8x8-v0 --total-timesteps 500000 
 ```
 
-You should see `episodic_return` climbing toward 500 in the W&B dashboard.
-
 ### Baseline PPO (MiniGrid)
 
 ```bash
@@ -105,13 +103,16 @@ uv run python ppo_rnd.py --num-envs 64
 
 ### Running multiple seeds (for ablation study)
 
-Always run at least 3 seeds per experiment. Name your runs clearly:
+Always run at least 5 seeds per experiment. Name your runs clearly:
 
 ```bash
 uv run python ppo.py --num-envs 64 --seed 1 --run-name "baseline-seed1"
 uv run python ppo.py --num-envs 64 --seed 2 --run-name "baseline-seed2"
 uv run python ppo.py --num-envs 64 --seed 3 --run-name "baseline-seed3"
+uv run python ppo.py --num-envs 64 --seed 4 --run-name "baseline-seed2"
+uv run python ppo.py --num-envs 64 --seed 5 --run-name "baseline-seed3"
 ```
+
 ---
 
 ## Key Hyperparameters (Examples)

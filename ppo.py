@@ -102,30 +102,34 @@ def layer_init(layer, std=np.sqrt(2), bias_const=0.0):
 class Agent(nn.Module):
     def __init__(self, envs):
         super().__init__()
-        self.critic = nn.Sequential(
-            layer_init(nn.Linear(np.array(envs.single_observation_space.shape).prod(), 64)),
-            nn.Tanh(),
-            layer_init(nn.Linear(64, 64)),
-            nn.Tanh(),
-            layer_init(nn.Linear(64, 1), std=1.0),
+        obs_dim = int(np.array(envs.single_observation_space.shape).prod())
+        self.network = nn.Sequential(
+            layer_init(nn.Linear(obs_dim, 256)),
+            nn.ReLU(),
+            layer_init(nn.Linear(256, 448)),
+            nn.ReLU(),
         )
+        self.extra_layer = nn.Sequential(layer_init(nn.Linear(448, 448), std=0.1), nn.ReLU())
         self.actor = nn.Sequential(
-            layer_init(nn.Linear(np.array(envs.single_observation_space.shape).prod(), 64)),
-            nn.Tanh(),
-            layer_init(nn.Linear(64, 64)),
-            nn.Tanh(),
-            layer_init(nn.Linear(64, envs.single_action_space.n), std=0.01),
+            layer_init(nn.Linear(448, 448), std=0.01),
+            nn.ReLU(),
+            layer_init(nn.Linear(448, envs.single_action_space.n), std=0.01),
         )
+        self.critic = layer_init(nn.Linear(448, 1), std=0.01)
 
     def get_value(self, x):
-        return self.critic(x)
+        hidden = self.network(x)
+        features = self.extra_layer(hidden)
+        return self.critic(features + hidden)
 
     def get_action_and_value(self, x, action=None):
-        logits = self.actor(x)
+        hidden = self.network(x)
+        logits = self.actor(hidden)
         probs = Categorical(logits=logits)
+        features = self.extra_layer(hidden)
         if action is None:
             action = probs.sample()
-        return action, probs.log_prob(action), probs.entropy(), self.critic(x)
+        return action, probs.log_prob(action), probs.entropy(), self.critic(features + hidden)
 
 
 if __name__ == "__main__":

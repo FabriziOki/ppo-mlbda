@@ -4,9 +4,6 @@ wandb
 runs
 .wandb_key
 CLAUDE.md
-
+*.png
 # AgentOps session artifacts
 .agents/
-ppo_rnd_envpool.py
-rnd_vs_rnd_entropy.png
-sample_comparison.png
