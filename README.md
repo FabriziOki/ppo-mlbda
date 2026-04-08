@@ -81,12 +81,12 @@ Paste your API key from `wandb.ai/settings` when prompted. You only need to do t
 
 ## Running Experiments
 
-### Sanity check (CartPole)
+### Sanity check (8x8)
 
 Run this first to verify your setup is working:
 
 ```bash
-uv run python ppo.py --env-id CartPole-v1 --total-timesteps 500000 
+uv run python ppo.py --env-id MiniGrid-Empty-8x8-v0 --total-timesteps 500000 
 ```
 
 You should see `episodic_return` climbing toward 500 in the W&B dashboard.
