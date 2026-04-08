@@ -86,15 +86,21 @@ Paste your API key from `wandb.ai/settings` when prompted. You only need to do t
 Run this first to verify your setup is working:
 
 ```bash
-uv run python ppo.py --env-id CartPole-v1 --total-timesteps 500000 --track --wandb-project-name "ppo-mlbda" --wandb-entity "ppo-enhance"
+uv run python ppo.py --env-id CartPole-v1 --total-timesteps 500000 
 ```
 
 You should see `episodic_return` climbing toward 500 in the W&B dashboard.
 
-### Baseline (MiniGrid)
+### Baseline PPO (MiniGrid)
 
 ```bash
-uv run python ppo.py --env-id MiniGrid-FourRooms-v0 --total-timesteps 1000000 --track --wandb-project-name "ppo-mlbda" --wandb-entity "ppo-enhance"
+uv run python ppo.py --num-envs 64 
+```
+
+### RND Enhanced PPO (MiniGrid)
+
+```bash
+uv run python ppo_rnd.py --num-envs 64 
 ```
 
 ### Running multiple seeds (for ablation study)
@@ -102,24 +108,23 @@ uv run python ppo.py --env-id MiniGrid-FourRooms-v0 --total-timesteps 1000000 --
 Always run at least 3 seeds per experiment. Name your runs clearly:
 
 ```bash
-uv run python ppo.py --env-id MiniGrid-FourRooms-v0 --seed 1 --track --wandb-project-name "ppo-mlbda" --wandb-entity "ppo-enhance" --run-name "baseline-seed1"
-uv run python ppo.py --env-id MiniGrid-FourRooms-v0 --seed 2 --track --wandb-project-name "ppo-mlbda" --wandb-entity "ppo-enhance" --run-name "baseline-seed2"
-uv run python ppo.py --env-id MiniGrid-FourRooms-v0 --seed 3 --track --wandb-project-name "ppo-mlbda" --wandb-entity "ppo-enhance" --run-name "baseline-seed3"
+uv run python ppo.py --num-envs 64 --seed 1 --run-name "baseline-seed1"
+uv run python ppo.py --num-envs 64 --seed 2 --run-name "baseline-seed2"
+uv run python ppo.py --num-envs 64 --seed 3 --run-name "baseline-seed3"
 ```
-
-> **Important:** Always include `--wandb-entity "ppo-enhance"` so all runs appear in the shared team dashboard instead of any personal account. `ppo-enhance` is our W&B team name.
-
 ---
 
-## Key Hyperparameters
+## Key Hyperparameters (Examples)
 
 | Flag | Default | Description |
 |---|---|---|
 | `--env-id` | `CartPole-v1` | Environment to train on |
 | `--total-timesteps` | `500000` | Total training steps |
-| `--num-envs` | `4` | Parallel environments |
+| `--num-envs` | `4` | Parallel environments (use 64 for MiniGrid) |
+| `--num-steps` | `128` | Rollout length per environment per update |
 | `--seed` | `1` | Random seed |
 | `--track` | `False` | Enable W&B logging |
+| `--capture-video` | `False` | Save mp4 videos of agent episodes |
 | `--wandb-project-name` | `cleanRL` | W&B project name |
 | `--wandb-entity` | `None` | W&B team name |
 | `--run-name` | auto-generated | Name of the run in W&B |
@@ -137,19 +142,6 @@ Open your [W&B dashboard](https://wandb.ai) in the browser while training runs. 
 - **losses/entropy** — exploration level
 
 > **Tip:** In W&B, set the x-axis to `global_step` for all charts to see actual environment timesteps instead of logging steps.
-
----
-
-## Project Structure
-
-```
-ppo-mlbda/
-├── ppo.py              # Baseline PPO implementation (CleanRL)
-├── ppo_enhanced.py     # Enhanced PPO (to be added)
-├── pyproject.toml      # Dependencies managed by uv
-├── uv.lock             # Locked dependency versions
-└── README.md
-```
 
 ---
 

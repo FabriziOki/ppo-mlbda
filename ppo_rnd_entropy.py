@@ -1,4 +1,4 @@
-# PPO + RND (Random Network Distillation) for MiniGrid sparse-reward environments
+# PPO + RND (Random Network Distillation) + linear adaptive entropy scheduling for MiniGrid
 # Adapted from CleanRL's ppo_rnd_envpool.py — ported to gymnasium 1.x / MiniGrid / flat observations
 import os
 import random
@@ -65,8 +65,10 @@ class Args:
     """the surrogate clipping coefficient"""
     clip_vloss: bool = True
     """Toggles whether or not to use a clipped loss for the value function, as per the paper."""
-    ent_coef: float = 0.01
-    """coefficient of the entropy"""
+    start_entropy: float = 0.2
+    """initial entropy coefficient (high exploration at the start)"""
+    end_entropy: float = 0.002
+    """final entropy coefficient (low exploration at the end)"""
     vf_coef: float = 0.5
     """coefficient of the value function"""
     max_grad_norm: float = 0.5
@@ -306,6 +308,10 @@ if __name__ == "__main__":
             lrnow = frac * args.learning_rate
             optimizer.param_groups[0]["lr"] = lrnow
 
+        # Linear entropy annealing: start_entropy -> end_entropy over training
+        frac = 1.0 - (iteration - 1.0) / args.num_iterations
+        ent_coef = args.end_entropy + frac * (args.start_entropy - args.end_entropy)
+
         for step in range(0, args.num_steps):
             global_step += args.num_envs
             obs[step] = next_obs
@@ -472,7 +478,7 @@ if __name__ == "__main__":
                 v_loss = ext_v_loss + int_v_loss
 
                 entropy_loss = entropy.mean()
-                loss = pg_loss - args.ent_coef * entropy_loss + v_loss * args.vf_coef + forward_loss
+                loss = pg_loss - ent_coef * entropy_loss + v_loss * args.vf_coef + forward_loss
 
                 optimizer.zero_grad()
                 loss.backward()
@@ -489,6 +495,7 @@ if __name__ == "__main__":
 
         # TRY NOT TO MODIFY: record rewards for plotting purposes
         writer.add_scalar("charts/learning_rate", optimizer.param_groups[0]["lr"], global_step)
+        writer.add_scalar("charts/ent_coef", ent_coef, global_step)
         writer.add_scalar("losses/value_loss", v_loss.item(), global_step)
         writer.add_scalar("losses/policy_loss", pg_loss.item(), global_step)
         writer.add_scalar("losses/entropy", entropy_loss.item(), global_step)
