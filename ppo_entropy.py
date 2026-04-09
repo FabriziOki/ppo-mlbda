@@ -63,9 +63,9 @@ class Args:
     """the surrogate clipping coefficient"""
     clip_vloss: bool = True
     """Toggles whether or not to use a clipped loss for the value function, as per the paper."""
-    start_entropy: float = 0.2
+    start_entropy: float = 0.1
     """initial entropy coefficient (high exploration at the start)"""
-    end_entropy: float = 0.002
+    end_entropy: float = 0.01
     """final entropy coefficient (low exploration at the end)"""
     vf_coef: float = 0.5
     """coefficient of the value function"""
