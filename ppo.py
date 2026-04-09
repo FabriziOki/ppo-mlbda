@@ -24,7 +24,7 @@ class Args:
     """seed of the experiment"""
     torch_deterministic: bool = True
     """if toggled, `torch.backends.cudnn.deterministic=False`"""
-    cuda: bool = True
+    cuda: bool = False
     """if toggled, cuda will be enabled by default"""
     track: bool = True
     """if toggled, this experiment will be tracked with Weights and Biases"""
@@ -36,9 +36,9 @@ class Args:
     """whether to capture videos of the agent performances (check out `videos` folder)"""
 
     # Algorithm specific arguments
-    env_id: str = "MiniGrid-FourRooms-v0"
+    env_id: str = "MiniGrid-MultiRoom-N4-S5-v0"
     """the id of the environment"""
-    total_timesteps: int = 1000000
+    total_timesteps: int = 3000000
     """total timesteps of the experiments"""
     learning_rate: float = 1e-4
     """the learning rate of the optimizer"""
@@ -109,7 +109,6 @@ class Agent(nn.Module):
             layer_init(nn.Linear(256, 448)),
             nn.ReLU(),
         )
-        self.extra_layer = nn.Sequential(layer_init(nn.Linear(448, 448), std=0.1), nn.ReLU())
         self.actor = nn.Sequential(
             layer_init(nn.Linear(448, 448), std=0.01),
             nn.ReLU(),
@@ -118,18 +117,15 @@ class Agent(nn.Module):
         self.critic = layer_init(nn.Linear(448, 1), std=0.01)
 
     def get_value(self, x):
-        hidden = self.network(x)
-        features = self.extra_layer(hidden)
-        return self.critic(features + hidden)
+        return self.critic(self.network(x))
 
     def get_action_and_value(self, x, action=None):
         hidden = self.network(x)
         logits = self.actor(hidden)
         probs = Categorical(logits=logits)
-        features = self.extra_layer(hidden)
         if action is None:
             action = probs.sample()
-        return action, probs.log_prob(action), probs.entropy(), self.critic(features + hidden)
+        return action, probs.log_prob(action), probs.entropy(), self.critic(hidden)
 
 
 if __name__ == "__main__":

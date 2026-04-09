@@ -81,7 +81,7 @@ Paste your API key from `wandb.ai/settings` when prompted. You only need to do t
 
 ## Running Experiments
 
-### Sanity check (8x8)
+### Sanity check (8x8 Empty Room Environment)
 
 Run this first to verify your setup is working:
 
@@ -115,11 +115,11 @@ uv run python ppo.py --num-envs 64 --seed 5 --run-name "baseline-seed3"
 
 ---
 
-## Key Hyperparameters (Examples)
+## Key Hyperparameters (Example Parameters)
 
 | Flag | Default | Description |
 |---|---|---|
-| `--env-id` | `CartPole-v1` | Environment to train on |
+| `--env-id` | `MiniGrid-Empty-8x8-v0` | Environment to train on |
 | `--total-timesteps` | `500000` | Total training steps |
 | `--num-envs` | `4` | Parallel environments (use 64 for MiniGrid) |
 | `--num-steps` | `128` | Rollout length per environment per update |
